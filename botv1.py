@@ -13,7 +13,9 @@ with open('config.json') as f:
     config = json.load(f)
 
 # Connect our wallet
-web3 = Web3(Web3.HTTPProvider("https://bsc-dataseed.binance.org/"))
+# https://bsc-dataseed.binance.org/
+# http://127.0.0.1:8545/
+web3 = Web3(Web3.HTTPProvider("http://127.0.0.1:8545/"))
 print("Web3 Connected: {}".format(web3.isConnected()))
 
 
