@@ -5,7 +5,6 @@ import time
 import datetime
 import sys
 import json
-import numpy as np
 import random
 from decimal import Decimal
 from datetime import datetime
