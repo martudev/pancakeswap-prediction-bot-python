@@ -155,11 +155,11 @@ def CarnacSays(amount):
 
             nextepoch = getEpoch()
             nextRound = getRounds(nextepoch)
-            print(nextRound[9]*10e-19, "UP investors")
-            print(nextRound[10]*10e-19, "DOWN investors")
+            print(web3.fromWei(nextRound[9], 'ether'), "UP investors")
+            print(web3.fromWei(nextRound[10], 'ether'), "DOWN investors")
             if lose_counter == 0:
                 multiplier = 1
-                if nextRound[9]*10e-19 < nextRound[10]*10e-19:
+                if web3.fromWei(nextRound[9], 'ether') < web3.fromWei(nextRound[10], 'ether'):
                     print(f'Going UP #{epoch} | {amount * multiplier} BNB  ')
                     betBull(amount * multiplier)
                 else:
@@ -168,7 +168,7 @@ def CarnacSays(amount):
             else:
                 multiplier *= basal_multiplier
                 #prediction = random.randint(0,1)
-                if nextRound[9]*10e-19 < nextRound[10]*10e-19:
+                if web3.fromWei(nextRound[9], 'ether') < web3.fromWei(nextRound[10], 'ether'):
                     print(f'Going UP #{epoch} | {amount * multiplier} BNB  ')
                     betBull(amount * multiplier)
                 else:
