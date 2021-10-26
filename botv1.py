@@ -84,6 +84,58 @@ def getEpoch():
     return epoch
 
 
+def checkClaims():
+    print("Checking previous round for winnings.")
+    sender_address = web3.toChecksumAddress(config["walletAddress"])
+    addr = web3.toChecksumAddress(config["predictionContract"])
+    contract = web3.eth.contract(address=addr, abi=PancakePredictionV2ABI)
+    epochs = []
+    lastEpoch = (int(getEpoch()) - 2)
+    twoEpoch = lastEpoch - 1
+    threeEpoch = twoEpoch - 1
+    fourEpoch = threeEpoch - 1
+    epochs.append(twoEpoch)
+    epochs.append(lastEpoch)
+    epochs.append(threeEpoch)
+    epochs.append(fourEpoch)
+    claims1 = contract.functions.claimable(lastEpoch, sender_address).call()
+    claims2 = contract.functions.claimable(twoEpoch, sender_address).call()
+    claims3 = contract.functions.claimable(threeEpoch, sender_address).call()
+    claims4 = contract.functions.claimable(fourEpoch, sender_address).call()
+    if claims1 != False or claims2 != False or claims3 != False or claims4 != False:
+        claimWinnings()
+        return True
+    else:
+        print("Didn't find any transaction to claim")
+        return False
+
+def claimWinnings():
+    predictionContract = web3.toChecksumAddress(config["predictionContract"])
+    contract = web3.eth.contract(address=predictionContract,abi=PancakePredictionV2ABI)
+    sender_address = web3.toChecksumAddress(config["walletAddress"])
+    nonce = web3.eth.get_transaction_count(sender_address)
+    epochs = []
+    ###################################################################
+
+    lastEpoch = (int(getEpoch()) - 2)
+    epochs.append(lastEpoch)
+
+    ####################################################################
+    try:
+        entry_transaction = contract.functions.claim(epochs).buildTransaction({
+            'chainId': 56,
+            'from': sender_address,
+            'gas': config["gasAmount"],
+            'gasPrice': web3.toWei('5','gwei'),
+            'nonce': nonce
+        })
+        signed_txn = web3.eth.account.sign_transaction(entry_transaction,config["walletPrivateKey"])
+        tx_token = web3.eth.send_raw_transaction(signed_txn.rawTransaction)
+        print("Claimed {}".format(web3.toHex(tx_token)))
+    except:
+        print("Recompensa no encontrada")
+
+
 def CarnacSays(amount):
     global minbet, basal_multiplier
     amount = minbet
