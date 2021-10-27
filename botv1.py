@@ -15,6 +15,10 @@ with open('config.json') as f:
 # Connect our wallet
 # https://bsc-dataseed.binance.org/
 # http://127.0.0.1:8545/
+# https://bsc-dataseed1.ninicoin.io
+#
+# RCPs Recommended by binance
+# https://docs.binance.org/smart-chain/developer/rpc.html
 web3 = Web3(Web3.HTTPProvider("http://127.0.0.1:8545/"))
 print("Web3 Connected: {}".format(web3.isConnected()))
 

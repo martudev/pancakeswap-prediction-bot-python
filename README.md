@@ -21,7 +21,7 @@ Run `python file_name.py` and enter a **minbet** and a **basal_multiplier**
 Run test-net
 
 ```
-ganache-cli -h 0.0.0.0 -f https://bsc-dataseed.binance.org/
+ganache-cli -h 0.0.0.0 --db /home/{user}/blockchain-db -f https://bsc-dataseed.binance.org/
 ```
 
 Open the **config.json** file and add youre `walletAddress` for **dev** and `walletPrivateKey` for **dev**
