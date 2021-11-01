@@ -19,7 +19,7 @@ with open('config.json') as f:
 #
 # RCPs Recommended by binance
 # https://docs.binance.org/smart-chain/developer/rpc.html
-web3 = Web3(Web3.HTTPProvider("https://data-seed-prebsc-1-s1.binance.org:8545/"))
+web3 = Web3(Web3.HTTPProvider("http://127.0.0.1:8545/"))
 print("Web3 Connected: {}".format(web3.isConnected()))
 
 
@@ -44,7 +44,7 @@ def betBear(amount):
     sender_address = web3.toChecksumAddress(config["walletAddress"])
     nonce = web3.eth.get_transaction_count(sender_address)
     entry_transaction = contract.functions.betBear(int(getEpoch())).buildTransaction({
-        'chainId': 97, # 56 / 97
+        'chainId': 56, # 97 / 56
         'from': sender_address,
         'gas': config["gasAmount"],
         'gasPrice': web3.toWei('5','gwei'),
@@ -62,7 +62,7 @@ def betBull(amount):
     sender_address = web3.toChecksumAddress(config["walletAddress"])
     nonce = web3.eth.get_transaction_count(sender_address)
     entry_transaction = contract.functions.betBull(int(getEpoch())).buildTransaction({
-        'chainId': 97,
+        'chainId': 56,
         'from': sender_address,
         'gas': config["gasAmount"],
         'gasPrice': web3.toWei('5','gwei'),
@@ -127,7 +127,7 @@ def claimWinnings():
     ####################################################################
     try:
         entry_transaction = contract.functions.claim(epochs).buildTransaction({
-            'chainId': 97,
+            'chainId': 56,
             'from': sender_address,
             'gas': config["gasAmount"],
             'gasPrice': web3.toWei('5','gwei'),

@@ -19,6 +19,10 @@ class BotChecker {
         window.addEventListener('BotChecker.AppLoaded', () => this.onLoadedApp(), false)
     }
 
+    sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
     checkIsLoaded() {
         var root = document.getElementById('root')
         var button = root.firstElementChild.children[2].firstElementChild.firstElementChild.querySelector('button')
@@ -28,11 +32,14 @@ class BotChecker {
         return false
     }
 
-    isWorking() {
+    async isWorking() {
         var xpath = "//div[text()='5m']";
         var matchingElement = document.evaluate(xpath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
-        var time = matchingElement.parentElement.firstElementChild.textContent
-        return (time.split(':').length == 2)
+        var timeNode = matchingElement.parentElement.firstElementChild
+        var timeSeconds = parseInt(timeNode.textContent.split(':').slice(-1), 10)
+        await this.sleep(2000)
+        var timeSecondsFuture = parseInt(timeNode.textContent.split(':').slice(-1), 10)
+        return (timeSeconds != timeSecondsFuture)
     }
 
     areMarketsPaused() {
@@ -41,14 +48,14 @@ class BotChecker {
         return (matchingElement != null)
     }
     
-    onLoadedApp() {
+    async onLoadedApp() {
         console.log('loaded')
+        clearInterval(this.intervalId)
         this.callback({
             isLoaded: true,
-            isWorking: this.isWorking(),
+            isWorking: await this.isWorking(),
             areMarketsPaused: this.areMarketsPaused(),
         })
-        clearInterval(this.intervalId)
     }
 
     onFinish(callback) {
